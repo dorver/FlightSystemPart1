@@ -1,0 +1,160 @@
+
+//////////////////////////////////////////////////////////////
+
+get_admin_by_username(_username text)
+
+Begin
+return query
+select "Administrators"."Id","Administrators"."First_Name","Administrators"."Last_Name",
+"Administrators"."User_Id" from "Administrators"
+inner join "Users"
+on "Users"."Id" = "Administrators"."User_Id"
+where "UserName" = _username;
+End
+
+//////////////////////////////////////////////////////////////
+
+get_airline_by_username(_username text)
+
+Begin
+return query
+select "Airline_Companies"."Id","Airline_Companies"."Name","Airline_Companies"."Country_Id",
+"Airline_Companies"."User_Id" from "Airline_Companies"
+inner join "Users"
+on "Users"."Id" = "Airline_Companies"."User_Id"
+where "UserName" = _username;
+End
+
+//////////////////////////////////////////////////////////////
+
+get_arrival_flights(_country_id integer)
+
+Begin
+return query
+select "Flights"."Id","Flights"."Airline_Company_Id","Flights"."Origin_Country_Id",
+"Flights"."Destination_Country_Id","Flights"."Departure_Time","Flights"."Landing_Time",
+"Flights"."Remaining_Tickets"
+from "Flights"
+where "Flights"."Destination_Country_Id" = _country_id and
+"Flights"."Landing_Time" <= current_timestamp + interval '12 hours' and
+"Flights"."Landing_Time" >= current_timestamp;
+End
+
+//////////////////////////////////////////////////////////////
+
+get_customer_by_username(_username text)
+
+Begin
+return query
+select "Customers"."Id","Customers"."First_Name","Customers"."Last_Name",
+"Customers"."Address","Customers"."Phone_No","Customers"."Credit_Card_No",
+"Customers"."User_Id" from "Customers"
+inner join "Users"
+on "Users"."Id" = "Customers"."User_Id"
+where "UserName" = _username;
+End
+
+//////////////////////////////////////////////////////////////
+
+get_departure_flights(_country_id integer)
+
+Begin
+return query
+select "Flights"."Id","Flights"."Airline_Company_Id","Flights"."Origin_Country_Id",
+"Flights"."Destination_Country_Id","Flights"."Departure_Time","Flights"."Landing_Time",
+"Flights"."Remaining_Tickets"
+from "Flights"
+where "Flights"."Destination_Country_Id" = _country_id and
+"Flights"."Departure_Time" <= current_timestamp + interval '12 hours' and
+"Flights"."Departure_Time" >= current_timestamp;
+End
+
+//////////////////////////////////////////////////////////////
+
+get_flights_by_airline_id(_airline_id bigint)
+
+Begin
+return query
+select "Flights"."Id","Flights"."Airline_Company_Id","Flights"."Origin_Country_Id",
+"Flights"."Destination_Country_Id","Flights"."Departure_Time","Flights"."Landing_Time",
+"Flights"."Remaining_Tickets"
+from "Flights"
+where "Flights"."Airline_Company_Id" = _airline_id;
+End
+
+//////////////////////////////////////////////////////////////
+
+get_flights_by_customer(_customer_id bigint)
+
+Begin
+return query
+select "Flights"."Id","Flights"."Airline_Company_Id","Flights"."Origin_Country_Id",
+"Flights"."Destination_Country_Id","Flights"."Departure_Time","Flights"."Landing_Time",
+"Flights"."Remaining_Tickets"
+from "Flights"
+inner join "Tickets"
+on "Flights"."Id" = "Tickets"."Flight_Id"
+where "Customer_Id" = "_customer_id";
+End
+
+//////////////////////////////////////////////////////////////
+
+get_flights_by_departure_date(_date date)
+
+BEGIN 
+Return Query
+select "Flights"."Id","Flights"."Airline_Company_Id","Flights"."Origin_Country_Id",
+"Flights"."Destination_Country_Id","Flights"."Departure_Time","Flights"."Landing_Time",
+"Flights"."Remaining_Tickets" from "Flights"
+where CAST("Flights"."Departure_Time" AS DATE) = _date;
+End
+
+//////////////////////////////////////////////////////////////
+
+get_flights_by_landing_date(_date date)
+
+BEGIN 
+Return Query
+select "Flights"."Id","Flights"."Airline_Company_Id","Flights"."Origin_Country_Id",
+"Flights"."Destination_Country_Id","Flights"."Departure_Time","Flights"."Landing_Time",
+"Flights"."Remaining_Tickets" from "Flights"
+where CAST("Flights"."Landing_Time" AS DATE) = _date;
+End
+
+//////////////////////////////////////////////////////////////
+
+get_flights_by_parameters(_country_id integer, _destination_country_id integer, _date timestamp)
+
+Begin
+return query
+select "Flights"."Id","Flights"."Airline_Company_Id","Flights"."Origin_Country_Id",
+"Flights"."Destination_Country_Id","Flights"."Departure_Time","Flights"."Landing_Time",
+"Flights"."Remaining_Tickets"
+from "Flights"
+where "Flights"."Origin_Country_Id" = _origin_country_id and
+"Flights"."Destination_Country_Id" = _destination_country_id and
+CASt("Flights"."Departure_Time" AS DATE) = "_date";
+End
+
+//////////////////////////////////////////////////////////////
+
+get_tickets_by_customer(_customer_id bigint)
+
+Begin
+return query
+select "Tickets"."Id","Tickets"."Flight_Id","Tickets"."Customer_Id"
+from "Tickets"
+where "Tickets"."Customer_Id" = _customer_id;
+End
+
+//////////////////////////////////////////////////////////////
+
+get_user_by_username(_username text)
+
+Begin
+return query
+select "Users"."Id","Users"."UserName","Users"."Password",
+"Users"."Email","Users"."User_Role"
+from "Users"
+where "Users"."UserName" = _username;
+End
